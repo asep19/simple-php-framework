@@ -54,11 +54,27 @@
     }
 
     private static function autoload() {
+      spl_autoload_register(array(__CLASS__, 'load'));
+    }
+
+    // Define a custom load method
+    private static function load($classname) {
+
+      if(substr($classname, -10) == "Controller") {
+        require_once CURR_CONTROLLER_PATH . "$classname.class.php"; 
+      } elseif(substr($classname, -5) == "Model") {
+        require_once MODEL_PATH . "$classname.class.php";
+      } 
 
     }
 
     private static function dispatch() {
+      // Instantiate the controller class and call its action method
+      $controller_name = CONTROLLER . "Controller";
+      $action_name = ACTION . "Action";
+      $controller = new $controller_name;
 
+      $controller_name->$action_name(); 
     }
 
   }
